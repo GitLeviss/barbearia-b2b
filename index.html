@@ -1,0 +1,936 @@
+<title>BarbeariaB2B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EEEDEA; --surface:#FFFFFF; --surface-2:#F6F5F2; --surface-3:#EAE8E3;
+  --line:#DBD8D1; --line-strong:#BFBAB1;
+  --ink:#191C1F; --ink-2:#4C545B; --ink-3:#7B838B;
+  --accent:#14495B; --accent-ink:#FFFFFF; --accent-soft:#E0EBF0; --accent-line:#9FC2CE;
+  --brass:#9C7318; --brass-soft:#F3E9D2;
+  --ok:#2C7A54; --ok-soft:#E1EFE8;
+  --warn:#8E6210; --warn-soft:#F6EDD9;
+  --bad:#A33528; --bad-soft:#F6E3E0;
+  --shadow-sm:0 1px 2px rgba(25,28,31,.07);
+  --shadow:0 1px 2px rgba(25,28,31,.06),0 10px 28px rgba(25,28,31,.07);
+  --r:10px; --r-lg:16px;
+  --display:"Big Shoulders Display","Arial Narrow",sans-serif;
+  --body:"Public Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","Consolas",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#131619; --surface:#1B1F23; --surface-2:#22272C; --surface-3:#2A3036;
+    --line:#2E353B; --line-strong:#444C53;
+    --ink:#EDEFF1; --ink-2:#AFB7BE; --ink-3:#808991;
+    --accent:#5FAAC3; --accent-ink:#0D1114; --accent-soft:#1A2F39; --accent-line:#2F5566;
+    --brass:#D7A63D; --brass-soft:#2C2614;
+    --ok:#5CBE8C; --ok-soft:#172D22;
+    --warn:#D5A23F; --warn-soft:#2C2614;
+    --bad:#E08274; --bad-soft:#2E1D1A;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#131619; --surface:#1B1F23; --surface-2:#22272C; --surface-3:#2A3036;
+  --line:#2E353B; --line-strong:#444C53;
+  --ink:#EDEFF1; --ink-2:#AFB7BE; --ink-3:#808991;
+  --accent:#5FAAC3; --accent-ink:#0D1114; --accent-soft:#1A2F39; --accent-line:#2F5566;
+  --brass:#D7A63D; --brass-soft:#2C2614;
+  --ok:#5CBE8C; --ok-soft:#172D22;
+  --warn:#D5A23F; --warn-soft:#2C2614;
+  --bad:#E08274; --bad-soft:#2E1D1A;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:0 56px}
+
+/* masthead */
+.mast{border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.mast-in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;margin-right:auto}
+.pole{width:14px;height:34px;border-radius:7px;border:1px solid var(--line-strong);background:repeating-linear-gradient(135deg,var(--accent) 0 5px,var(--surface) 5px 10px,var(--bad) 10px 15px,var(--surface) 15px 20px);flex:none}
+.brand-name{font-family:var(--display);font-weight:800;font-size:27px;line-height:.95}
+.brand-sub{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.tabs{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+.tab{padding:7px 15px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.badge-proto{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);background:var(--brass-soft);border:1px solid var(--brass);padding:4px 9px;border-radius:999px;font-weight:600}
+
+/* shared */
+.view-head{padding-block:30px 20px;display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:26px}
+.view-head h2{font-family:var(--display);font-size:40px;font-weight:700;line-height:.98}
+.view-head p{color:var(--ink-2);max-width:56ch;font-size:14px}
+.eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--brass);font-weight:700;margin-bottom:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px}
+.chip-ok{background:var(--ok-soft);color:var(--ok)}
+.chip-warn{background:var(--warn-soft);color:var(--warn)}
+.chip-bad{background:var(--bad-soft);color:var(--bad)}
+.chip-acc{background:var(--accent-soft);color:var(--accent)}
+.money{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* client / phone */
+.client-grid{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:40px;align-items:start}
+@media (max-width:860px){.client-grid{grid-template-columns:1fr;gap:28px}}
+.phone{width:100%;max-width:370px;margin:0 auto;border:1px solid var(--line-strong);border-radius:30px;background:var(--surface);box-shadow:var(--shadow);padding:9px;position:sticky;top:96px}
+@media (max-width:860px){.phone{position:static}}
+.phone-screen{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);display:flex;flex-direction:column;min-height:610px}
+.ph-status{display:flex;justify-content:space-between;align-items:center;padding:7px 16px 3px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.ph-top{display:flex;align-items:center;gap:10px;padding:8px 14px 12px;border-bottom:1px solid var(--line)}
+.ph-back{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink-2);flex:none;font-size:18px;line-height:1}
+.ph-title{font-weight:700;font-size:14.5px}
+.ph-step{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.ph-body{padding:16px 14px 18px;flex:1;display:flex;flex-direction:column;gap:14px}
+.ph-foot{padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--surface-2)}
+.btn{display:block;width:100%;text-align:center;padding:12px;border-radius:var(--r);font-weight:700;font-size:14.5px}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary[disabled]{opacity:.42;cursor:not-allowed}
+.btn-ghost{border:1px solid var(--line-strong);color:var(--ink-2);font-weight:600}
+.field{display:block}
+.field span{display:block;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.field input{width:100%;padding:11px 12px;border:1px solid var(--line-strong);border-radius:var(--r);background:var(--surface-2);color:var(--ink);font:inherit;font-size:14px}
+.pick{display:flex;gap:11px;align-items:center;width:100%;text-align:left;padding:11px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface-2)}
+.pick[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.pick-main{flex:1;min-width:0}
+.pick-name{font-weight:600;font-size:14px}
+.pick-meta{font-size:12px;color:var(--ink-3)}
+.pick-price{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--brass);white-space:nowrap}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:17px;flex:none;border:1px solid var(--accent-line)}
+.daystrip{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px}
+.day{flex:none;width:52px;padding:7px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface-2);text-align:center}
+.day[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.day small{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.day b{font-family:var(--mono);font-size:16px;font-weight:600}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.slot{padding:9px 0;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);font-family:var(--mono);font-size:12.5px;font-weight:500;text-align:center}
+.slot[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.slot[disabled]{opacity:.34;text-decoration:line-through;cursor:not-allowed}
+.summary{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:0}
+.summary div{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;font-size:13.5px;border-bottom:1px solid var(--line)}
+.summary div:last-child{border-bottom:0;background:var(--surface-2);font-weight:700}
+.summary dt{color:var(--ink-3);font-size:12.5px}
+.summary dd{margin:0}
+.note{font-size:12.5px;color:var(--ink-2);background:var(--brass-soft);border-left:3px solid var(--brass);padding:9px 11px;border-radius:0 8px 8px 0}
+.done-mark{width:62px;height:62px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:14px auto 0}
+.appt{border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;display:flex;gap:11px;align-items:flex-start}
+.appt-when{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;text-align:center;line-height:1.3;border-right:1px solid var(--line);padding-right:11px;flex:none}
+.appt-when b{display:block;font-size:17px}
+
+/* annotation column */
+.annot{display:flex;flex-direction:column;gap:14px}
+.annot-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 17px;box-shadow:var(--shadow-sm)}
+.annot-card h4{font-size:14.5px;font-weight:700;margin-bottom:5px}
+.annot-card p{font-size:13.5px;color:var(--ink-2)}
+.annot-card ol{margin:8px 0 0;padding-left:19px;font-size:13.5px;color:var(--ink-2);display:flex;flex-direction:column;gap:5px}
+.rf{font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-weight:600;white-space:nowrap}
+.steplist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.steplist button{display:flex;gap:11px;align-items:center;width:100%;text-align:left;padding:9px 10px;border-radius:9px;font-size:13.5px;color:var(--ink-2)}
+.steplist button[aria-current="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.steplist i{font-family:var(--mono);font-style:normal;font-size:11px;width:22px;height:22px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;flex:none}
+.steplist button[aria-current="true"] i{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+
+/* panel */
+.panel{display:grid;grid-template-columns:214px minmax(0,1fr);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+@media (max-width:760px){.panel{grid-template-columns:1fr}}
+.side{background:var(--surface-2);border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:3px}
+@media (max-width:760px){.side{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line)}}
+.side-label{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding:4px 10px 8px}
+@media (max-width:760px){.side-label{display:none}}
+.side button{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--ink-2);white-space:nowrap}
+.side button[aria-current="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.panel-main{padding:20px;min-width:0}
+.panel-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.panel-head h3{font-family:var(--display);font-size:28px;font-weight:700;line-height:1}
+.panel-head span{font-size:13px;color:var(--ink-3)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 20px}
+.kpi{border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;background:var(--surface-2)}
+.kpi dt{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.kpi dd{margin:5px 0 0;font-family:var(--display);font-size:33px;font-weight:700;line-height:1}
+.kpi .delta{font-size:11.5px;font-weight:600;margin-top:4px;display:block}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+th{text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding:10px 13px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.linkish{color:var(--accent);font-weight:600;font-size:13px}
+.pro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.pro{border:1px solid var(--line);border-radius:var(--r);padding:14px;background:var(--surface-2);display:flex;gap:12px;align-items:flex-start}
+.pro h4{font-size:14.5px}
+.pro p{font-size:12.5px;color:var(--ink-3)}
+.bar-track{height:6px;border-radius:3px;background:var(--surface-3);overflow:hidden;margin-top:7px}
+.bar-fill{height:100%;background:var(--accent);border-radius:3px}
+.chart-card{border:1px solid var(--line);border-radius:var(--r);padding:16px;background:var(--surface-2)}
+.chart-card h4{font-size:14px;font-weight:700}
+.chart-card .sub{font-size:12.5px;color:var(--ink-3);margin-bottom:6px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+
+/* modeling */
+.model-sec{margin-bottom:34px}
+.model-sec > h3{font-family:var(--display);font-size:26px;font-weight:700;line-height:1;margin-bottom:4px}
+.model-sec > p{font-size:13.5px;color:var(--ink-2);max-width:68ch;margin-bottom:14px}
+.figure{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 14px;box-shadow:var(--shadow-sm)}
+.scroller{overflow-x:auto}
+.figure svg{display:block;min-width:600px;max-width:100%;height:auto;margin:0 auto}
+.figcap{font-size:12.5px;color:var(--ink-3);margin-top:12px;text-align:center}
+svg text{font-family:"Public Sans",system-ui,sans-serif}
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="brand">
+      <div class="pole" aria-hidden="true"></div>
+      <div>
+        <div class="brand-name">BarbeariaB2B</div>
+        <div class="brand-sub">Agendamento &amp; gest&#227;o</div>
+      </div>
+    </div>
+    <span class="badge-proto">Prot&#243;tipo naveg&#225;vel</span>
+    <nav class="tabs" role="tablist" aria-label="&#193;reas do prot&#243;tipo">
+      <button class="tab" role="tab" aria-selected="true" data-view="cliente">Fluxo do cliente</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="painel">Painel da barbearia</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="modelagem">Modelagem</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ CLIENTE ============ -->
+<section data-view-panel="cliente">
+  <div class="view-head">
+    <div>
+      <div class="eyebrow">Aplica&#231;&#227;o do cliente</div>
+      <h2>Marcar o hor&#225;rio sem mandar mensagem</h2>
+    </div>
+    <p>Sete telas, quatro toques at&#233; o hor&#225;rio reservado. Os dados exibidos s&#227;o fict&#237;cios e servem para demonstrar o comportamento da solu&#231;&#227;o.</p>
+  </div>
+
+  <div class="client-grid">
+    <div>
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="ph-status"><span>09:41</span><span>Barbearia B2B &#183; Osasco</span></div>
+
+          <div data-screen="login">
+            <div class="ph-top"><div class="ph-title">Entrar</div><div class="ph-step">1 / 7</div></div>
+            <div class="ph-body">
+              <div class="pole" style="width:100%;height:9px;border-radius:5px"></div>
+              <div>
+                <h3 style="font-family:var(--display);font-size:29px;font-weight:700;line-height:1">Barbearia B2B</h3>
+                <p style="font-size:13px;color:var(--ink-3)">Jardim Munhoz J&#250;nior, Osasco &#8212; aberto at&#233; 19h</p>
+              </div>
+              <label class="field" for="c-email"><span>E-mail ou telefone</span><input id="c-email" value="joao.martins@email.com"></label>
+              <label class="field" for="c-senha"><span>Senha</span><input id="c-senha" type="password" value="123456"></label>
+              <p style="font-size:12.5px;color:var(--ink-3)">Primeira vez aqui? <b style="color:var(--accent)">Criar conta</b></p>
+            </div>
+            <div class="ph-foot"><button class="btn btn-primary" data-go="servico">Entrar</button></div>
+          </div>
+
+          <div data-screen="servico" hidden>
+            <div class="ph-top"><button class="ph-back" data-go="login" aria-label="Voltar">&#8249;</button><div class="ph-title">Escolha o servi&#231;o</div><div class="ph-step">2 / 7</div></div>
+            <div class="ph-body" id="lista-servicos"></div>
+            <div class="ph-foot"><button class="btn btn-primary" data-go="profissional" id="btn-servico" disabled>Continuar</button></div>
+          </div>
+
+          <div data-screen="profissional" hidden>
+            <div class="ph-top"><button class="ph-back" data-go="servico" aria-label="Voltar">&#8249;</button><div class="ph-title">Escolha o profissional</div><div class="ph-step">3 / 7</div></div>
+            <div class="ph-body" id="lista-pros"></div>
+            <div class="ph-foot"><button class="btn btn-primary" data-go="horario" id="btn-pro" disabled>Continuar</button></div>
+          </div>
+
+          <div data-screen="horario" hidden>
+            <div class="ph-top"><button class="ph-back" data-go="profissional" aria-label="Voltar">&#8249;</button><div class="ph-title">Data e hor&#225;rio</div><div class="ph-step">4 / 7</div></div>
+            <div class="ph-body">
+              <div class="daystrip" id="dias"></div>
+              <div>
+                <p style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px">Hor&#225;rios livres</p>
+                <div class="slots" id="slots"></div>
+              </div>
+              <p class="note">Hor&#225;rios riscados j&#225; est&#227;o reservados. A grade respeita a dura&#231;&#227;o do servi&#231;o e a jornada do profissional.</p>
+            </div>
+            <div class="ph-foot"><button class="btn btn-primary" data-go="confirmar" id="btn-hora" disabled>Revisar agendamento</button></div>
+          </div>
+
+          <div data-screen="confirmar" hidden>
+            <div class="ph-top"><button class="ph-back" data-go="horario" aria-label="Voltar">&#8249;</button><div class="ph-title">Confirmar</div><div class="ph-step">5 / 7</div></div>
+            <div class="ph-body">
+              <dl class="summary" id="resumo"></dl>
+              <p class="note">Voc&#234; receber&#225; a confirma&#231;&#227;o agora e um lembrete 2 horas antes. O cancelamento &#233; gratuito at&#233; 1 hora antes do atendimento.</p>
+            </div>
+            <div class="ph-foot" style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn btn-primary" data-go="sucesso">Confirmar agendamento</button>
+              <button class="btn btn-ghost" data-go="horario">Trocar hor&#225;rio</button>
+            </div>
+          </div>
+
+          <div data-screen="sucesso" hidden>
+            <div class="ph-top"><div class="ph-title">Agendamento confirmado</div><div class="ph-step">6 / 7</div></div>
+            <div class="ph-body" style="text-align:center">
+              <div class="done-mark" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.2 5.2L20 7"/></svg></div>
+              <h3 style="font-family:var(--display);font-size:27px;font-weight:700;line-height:1.05">Hor&#225;rio reservado</h3>
+              <p id="sucesso-txt" style="font-size:13.5px;color:var(--ink-2)"></p>
+              <dl class="summary" id="resumo2" style="text-align:left"></dl>
+              <p style="font-size:12.5px;color:var(--ink-3)">C&#243;digo do agendamento <b class="money">#AG-2411-087</b></p>
+            </div>
+            <div class="ph-foot"><button class="btn btn-primary" data-go="meus">Ver meus agendamentos</button></div>
+          </div>
+
+          <div data-screen="meus" hidden>
+            <div class="ph-top"><div class="ph-title">Meus agendamentos</div><div class="ph-step">7 / 7</div></div>
+            <div class="ph-body">
+              <div id="appt-novo"></div>
+              <p style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)">Anteriores</p>
+              <div class="appt">
+                <div class="appt-when">OUT<b>28</b>14:30</div>
+                <div class="pick-main"><div class="pick-name">Corte Degrad&#234;</div><div class="pick-meta">com Nilo Ferreira</div><span class="chip chip-ok" style="margin-top:5px">Conclu&#237;do</span></div>
+              </div>
+              <div class="appt">
+                <div class="appt-when">OUT<b>07</b>18:00</div>
+                <div class="pick-main"><div class="pick-name">Corte + Barba</div><div class="pick-meta">com Wesley Amorim</div><span class="chip chip-bad" style="margin-top:5px">N&#227;o compareceu</span></div>
+              </div>
+            </div>
+            <div class="ph-foot"><button class="btn btn-ghost" data-go="servico">Agendar novamente</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annot">
+      <div class="annot-card">
+        <h4>Navegue pelas telas</h4>
+        <p>Use o prot&#243;tipo ao lado ou salte direto para uma tela.</p>
+        <ul class="steplist" id="steplist"></ul>
+      </div>
+      <div class="annot-card">
+        <h4>O que cada tela resolve</h4>
+        <ol>
+          <li><b>Entrar</b> &#8212; identifica o cliente e liga o agendamento ao hist&#243;rico dele. <span class="rf">RF01</span></li>
+          <li><b>Servi&#231;o</b> &#8212; pre&#231;o e dura&#231;&#227;o vis&#237;veis antes da escolha; a dura&#231;&#227;o define o tamanho do slot. <span class="rf">RF02</span></li>
+          <li><b>Profissional</b> &#8212; permite a prefer&#234;ncia por um barbeiro, com a op&#231;&#227;o &#8220;primeiro dispon&#237;vel&#8221;. <span class="rf">RF03</span></li>
+          <li><b>Data e hor&#225;rio</b> &#8212; mostra apenas o que est&#225; livre, eliminando o conflito de agenda. <span class="rf">RF04</span></li>
+          <li><b>Confirma&#231;&#227;o</b> &#8212; resumo e regra de cancelamento antes de reservar. <span class="rf">RF05</span></li>
+          <li><b>Comprovante</b> &#8212; c&#243;digo do agendamento e aviso do lembrete autom&#225;tico. <span class="rf">RF07</span></li>
+          <li><b>Meus agendamentos</b> &#8212; hist&#243;rico e cancelamento pelo pr&#243;prio cliente. <span class="rf">RF06</span></li>
+        </ol>
+      </div>
+      <div class="annot-card">
+        <h4>Regra de neg&#243;cio demonstrada</h4>
+        <p>O hor&#225;rio s&#243; aparece se couber inteiro na jornada do profissional e n&#227;o colidir com outro agendamento. A verifica&#231;&#227;o &#233; repetida no servidor no momento da confirma&#231;&#227;o, porque duas pessoas podem abrir a mesma grade ao mesmo tempo. <span class="rf">RNF04</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAINEL ============ -->
+<section data-view-panel="painel" hidden>
+  <div class="view-head">
+    <div>
+      <div class="eyebrow">Aplica&#231;&#227;o da barbearia</div>
+      <h2>O dia inteiro em uma tela</h2>
+    </div>
+    <p>Painel usado pelo gestor e pelos profissionais. Cada barbearia enxerga apenas os pr&#243;prios dados.</p>
+  </div>
+
+  <div class="panel">
+    <nav class="side" aria-label="Se&#231;&#245;es do painel">
+      <div class="side-label">Opera&#231;&#227;o</div>
+      <button data-panel="agenda" aria-current="true">Agenda do dia</button>
+      <button data-panel="servicos" aria-current="false">Servi&#231;os</button>
+      <button data-panel="equipe" aria-current="false">Equipe</button>
+      <button data-panel="indicadores" aria-current="false">Indicadores</button>
+    </nav>
+    <div class="panel-main">
+
+      <div data-panel-screen="agenda">
+        <div class="panel-head"><h3>Agenda do dia</h3><span>Segunda, 24 de novembro de 2026 &#183; 3 profissionais em atendimento</span></div>
+        <dl class="kpis">
+          <div class="kpi"><dt>Atendimentos hoje</dt><dd>14</dd><span class="delta" style="color:var(--ok)">+3 vs. m&#233;dia de segunda</span></div>
+          <div class="kpi"><dt>Receita prevista</dt><dd class="money">R$ 620</dd><span class="delta" style="color:var(--ink-3)">4 atendimentos ainda em aberto</span></div>
+          <div class="kpi"><dt>Ocupa&#231;&#227;o da grade</dt><dd>82%</dd><span class="delta" style="color:var(--ok)">+9 p.p. desde o uso do sistema</span></div>
+          <div class="kpi"><dt>Faltas no m&#234;s</dt><dd>7%</dd><span class="delta" style="color:var(--ok)">era 23% no caderno</span></div>
+        </dl>
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th>Hor&#225;rio</th><th>Cliente</th><th>Servi&#231;o</th><th>Profissional</th><th>Valor</th><th>Situa&#231;&#227;o</th><th></th></tr></thead>
+            <tbody>
+              <tr><td class="num">09:00</td><td>Marcos Vin&#237;cius</td><td>Corte Social</td><td>Douglas Prado</td><td class="num">R$ 35,00</td><td><span class="chip chip-ok">Conclu&#237;do</span></td><td></td></tr>
+              <tr><td class="num">09:30</td><td>Rafael Lima</td><td>Barba na Navalha</td><td>Wesley Amorim</td><td class="num">R$ 35,00</td><td><span class="chip chip-ok">Conclu&#237;do</span></td><td></td></tr>
+              <tr><td class="num">10:00</td><td>Eduardo Pires</td><td>Corte Degrad&#234;</td><td>Nilo Ferreira</td><td class="num">R$ 45,00</td><td><span class="chip chip-bad">N&#227;o compareceu</span></td><td></td></tr>
+              <tr><td class="num">10:40</td><td>Caio Bastos</td><td>Corte + Barba</td><td>Nilo Ferreira</td><td class="num">R$ 70,00</td><td><span class="chip chip-ok">Conclu&#237;do</span></td><td></td></tr>
+              <tr><td class="num">14:00</td><td>Jo&#227;o Martins</td><td>Corte Degrad&#234;</td><td>Nilo Ferreira</td><td class="num">R$ 45,00</td><td><span class="chip chip-acc">Em atendimento</span></td><td><span class="linkish">Concluir</span></td></tr>
+              <tr><td class="num">15:30</td><td>Pedro Henrique</td><td>Pezinho</td><td>Douglas Prado</td><td class="num">R$ 20,00</td><td><span class="chip chip-warn">Confirmado</span></td><td><span class="linkish">Abrir</span></td></tr>
+              <tr><td class="num">16:00</td><td>Thiago Rocha</td><td>Corte Infantil</td><td>Douglas Prado</td><td class="num">R$ 30,00</td><td><span class="chip chip-warn">Confirmado</span></td><td><span class="linkish">Abrir</span></td></tr>
+              <tr><td class="num">18:30</td><td>Luan Ferraz</td><td>Corte + Barba</td><td>Wesley Amorim</td><td class="num">R$ 70,00</td><td><span class="chip chip-warn">Pendente</span></td><td><span class="linkish">Abrir</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div data-panel-screen="servicos" hidden>
+        <div class="panel-head"><h3>Servi&#231;os</h3><span>A dura&#231;&#227;o define automaticamente o tamanho do slot na grade</span></div>
+        <div class="tbl-scroll">
+          <table>
+            <thead><tr><th>Servi&#231;o</th><th>Dura&#231;&#227;o</th><th>Pre&#231;o</th><th>Agendado no m&#234;s</th><th>Situa&#231;&#227;o</th><th></th></tr></thead>
+            <tbody id="tbl-servicos"></tbody>
+          </table>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px">Cadastrar, editar e desativar servi&#231;os s&#227;o opera&#231;&#245;es do gestor. <span class="rf">RF10</span></p>
+      </div>
+
+      <div data-panel-screen="equipe" hidden>
+        <div class="panel-head"><h3>Equipe</h3><span>Jornada e ocupa&#231;&#227;o da semana por profissional</span></div>
+        <div class="pro-grid" id="grid-pros"></div>
+        <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px">A jornada cadastrada aqui &#233; o que gera os hor&#225;rios livres na aplica&#231;&#227;o do cliente. <span class="rf">RF11</span> <span class="rf">RF12</span></p>
+      </div>
+
+      <div data-panel-screen="indicadores" hidden>
+        <div class="panel-head"><h3>Indicadores</h3><span>Novembro de 2026 &#183; dados fict&#237;cios</span></div>
+        <div class="two">
+          <div class="chart-card">
+            <h4>S&#225;bado concentra o dobro de atendimentos de segunda</h4>
+            <p class="sub">Atendimentos conclu&#237;dos por dia da semana, m&#233;dia de novembro</p>
+            <div class="scroller"><svg id="chart-semana" viewBox="0 0 540 260" role="img" aria-label="Gr&#225;fico de barras: atendimentos por dia da semana, de 18 na segunda a 44 no s&#225;bado" style="min-width:420px"></svg></div>
+          </div>
+          <div class="chart-card">
+            <h4>Onde est&#225; a receita</h4>
+            <p class="sub">Participa&#231;&#227;o de cada servi&#231;o no faturamento do m&#234;s</p>
+            <div id="receita-lista" style="display:flex;flex-direction:column;gap:11px;margin-top:10px"></div>
+          </div>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-3);margin-top:12px">Os indicadores v&#234;m do campo de situa&#231;&#227;o de cada agendamento, registrado durante a opera&#231;&#227;o. <span class="rf">RF13</span></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODELAGEM ============ -->
+<section data-view-panel="modelagem" hidden>
+  <div class="view-head">
+    <div>
+      <div class="eyebrow">Projeto da solu&#231;&#227;o</div>
+      <h2>Como o sistema foi estruturado</h2>
+    </div>
+    <p>Fluxo de navega&#231;&#227;o, modelo de dados e arquitetura em camadas que sustentam as telas das abas anteriores.</p>
+  </div>
+
+  <div class="model-sec">
+    <h3>Fluxo de navega&#231;&#227;o</h3>
+    <p>O caminho do cliente &#233; linear e revers&#237;vel; o painel da barbearia &#233; um acesso paralelo, com permiss&#245;es pr&#243;prias.</p>
+    <div class="figure">
+      <div class="scroller">
+        <svg viewBox="0 0 980 450" role="img" aria-label="Fluxograma de navega&#231;&#227;o: entrar, escolher servi&#231;o, profissional, data e hora, decis&#227;o de hor&#225;rio livre, confirmar e comprovante; o painel da barbearia &#233; uma raia separada com agenda, servi&#231;os, equipe e indicadores">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line-strong)"/>
+            </marker>
+            <marker id="arB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--brass)"/>
+            </marker>
+            <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+            </marker>
+          </defs>
+
+          <text x="14" y="30" font-size="11" font-weight="700" letter-spacing="1.6" fill="var(--brass)">CLIENTE</text>
+          <line x1="14" y1="270" x2="966" y2="270" stroke="var(--line)" stroke-width="1" stroke-dasharray="5 5"/>
+          <text x="14" y="300" font-size="11" font-weight="700" letter-spacing="1.6" fill="var(--brass)">BARBEARIA</text>
+
+          <rect x="14" y="52" width="104" height="44" rx="22" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+          <text x="66" y="79" text-anchor="middle" font-size="13" font-weight="600" fill="var(--accent)">Acesso</text>
+          <line x1="118" y1="74" x2="154" y2="74" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="158" y="50" width="140" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="228" y="79" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">1. Entrar</text>
+          <line x1="298" y1="74" x2="334" y2="74" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="338" y="50" width="140" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="408" y="79" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">2. Servi&#231;o</text>
+          <line x1="478" y1="74" x2="514" y2="74" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="518" y="50" width="140" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="588" y="79" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">3. Profissional</text>
+          <line x1="658" y1="74" x2="694" y2="74" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="698" y="50" width="140" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="768" y="79" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">4. Data e hora</text>
+
+          <path d="M768 98 L768 124 L408 124 L408 148" fill="none" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <path d="M408 152 L498 190 L408 228 L318 190 Z" fill="var(--brass-soft)" stroke="var(--brass)"/>
+          <text x="408" y="187" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brass)">Hor&#225;rio</text>
+          <text x="408" y="202" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brass)">livre?</text>
+
+          <path d="M318 190 L286 190 L286 140 L748 140 L748 100" fill="none" stroke="var(--line-strong)" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+          <text x="294" y="170" font-size="11.5" font-weight="600" fill="var(--ink-3)">n&#227;o</text>
+
+          <line x1="498" y1="190" x2="534" y2="190" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+          <text x="504" y="181" font-size="11.5" font-weight="600" fill="var(--ink-3)">sim</text>
+
+          <rect x="538" y="166" width="140" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="608" y="195" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">5. Confirmar</text>
+          <line x1="678" y1="190" x2="714" y2="190" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="718" y="166" width="150" height="48" rx="9" fill="var(--ok-soft)" stroke="var(--ok)"/>
+          <text x="793" y="188" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ok)">6. Comprovante</text>
+          <text x="793" y="204" text-anchor="middle" font-size="11" fill="var(--ok)">+ lembrete autom&#225;tico</text>
+
+          <path d="M868 190 L916 190 L916 244 L160 244 L160 216" fill="none" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+          <rect x="88" y="166" width="144" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="160" y="187" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">7. Meus</text>
+          <text x="160" y="203" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">agendamentos</text>
+
+          <rect x="14" y="322" width="118" height="48" rx="9" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+          <text x="73" y="351" text-anchor="middle" font-size="13" font-weight="600" fill="var(--accent)">Painel</text>
+          <line x1="132" y1="346" x2="168" y2="346" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="172" y="322" width="166" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="255" y="351" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Agenda do dia</text>
+          <line x1="338" y1="346" x2="362" y2="346" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="366" y="322" width="146" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="439" y="351" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Servi&#231;os</text>
+          <line x1="512" y1="346" x2="536" y2="346" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="540" y="322" width="146" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="613" y="351" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Equipe</text>
+          <line x1="686" y1="346" x2="710" y2="346" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar)"/>
+
+          <rect x="714" y="322" width="166" height="48" rx="9" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="797" y="351" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Indicadores</text>
+
+          <path d="M470 322 L470 302 L920 302 L920 110 L840 110" fill="none" stroke="var(--brass)" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arB)"/>
+          <text x="630" y="316" font-size="11.5" font-weight="600" fill="var(--brass)">servi&#231;os e jornada alimentam a grade de hor&#225;rios</text>
+
+          <path d="M793 214 L793 258 L255 258 L255 318" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arA)"/>
+          <text x="272" y="286" font-size="11.5" font-weight="600" fill="var(--accent)">o agendamento confirmado aparece na agenda do dia</text>
+        </svg>
+      </div>
+      <p class="figcap">Figura 1 &#8212; Fluxo de navega&#231;&#227;o. Linha cheia: navega&#231;&#227;o; linha tracejada: depend&#234;ncia de dados entre as duas aplica&#231;&#245;es.</p>
+    </div>
+  </div>
+
+  <div class="model-sec">
+    <h3>Modelo de dados</h3>
+    <p>Sete entidades. <b>Agendamento</b> &#233; a entidade central: liga cliente, profissional e servi&#231;o a uma faixa de hor&#225;rio e guarda a situa&#231;&#227;o que alimenta os indicadores.</p>
+    <div class="figure">
+      <div class="scroller">
+        <svg viewBox="0 0 980 470" role="img" aria-label="Modelo de dados: Barbearia cont&#233;m Profissional, Servi&#231;o e Disponibilidade; Usu&#225;rio, Profissional e Servi&#231;o se ligam a Agendamento, que gera Atendimento">
+          <g font-size="11.5" fill="var(--ink-2)">
+            <rect x="20" y="20" width="204" height="126" rx="10" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+            <text x="34" y="42" font-size="13.5" font-weight="700" fill="var(--accent)">Barbearia</text>
+            <line x1="20" y1="52" x2="224" y2="52" stroke="var(--accent-line)"/>
+            <text x="34" y="72">PK id</text><text x="34" y="92">nome, CNPJ</text>
+            <text x="34" y="112">endere&#231;o, telefone</text><text x="34" y="132">hor&#225;rio de funcionamento</text>
+
+            <rect x="20" y="300" width="204" height="126" rx="10" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+            <text x="34" y="322" font-size="13.5" font-weight="700" fill="var(--accent)">Usu&#225;rio</text>
+            <line x1="20" y1="332" x2="224" y2="332" stroke="var(--accent-line)"/>
+            <text x="34" y="352">PK id</text><text x="34" y="372">nome, e-mail, telefone</text>
+            <text x="34" y="392">senha (hash)</text><text x="34" y="412">perfil: cliente | profissional | gestor</text>
+
+            <rect x="304" y="20" width="196" height="108" rx="10" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+            <text x="318" y="42" font-size="13.5" font-weight="700" fill="var(--ink)">Profissional</text>
+            <line x1="304" y1="52" x2="500" y2="52" stroke="var(--line)"/>
+            <text x="318" y="72">PK id</text><text x="318" y="92">FK barbearia_id, usuario_id</text><text x="318" y="112">especialidades</text>
+
+            <rect x="304" y="166" width="196" height="108" rx="10" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+            <text x="318" y="188" font-size="13.5" font-weight="700" fill="var(--ink)">Servi&#231;o</text>
+            <line x1="304" y1="198" x2="500" y2="198" stroke="var(--line)"/>
+            <text x="318" y="218">PK id &#183; FK barbearia_id</text><text x="318" y="238">descri&#231;&#227;o, pre&#231;o</text><text x="318" y="258">dura&#231;&#227;o (min)</text>
+
+            <rect x="304" y="312" width="196" height="108" rx="10" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+            <text x="318" y="334" font-size="13.5" font-weight="700" fill="var(--ink)">Disponibilidade</text>
+            <line x1="304" y1="344" x2="500" y2="344" stroke="var(--line)"/>
+            <text x="318" y="364">PK id &#183; FK profissional_id</text><text x="318" y="384">dia, in&#237;cio, fim</text><text x="318" y="404">tipo: jornada | bloqueio</text>
+
+            <rect x="588" y="138" width="214" height="164" rx="10" fill="var(--brass-soft)" stroke="var(--brass)"/>
+            <text x="602" y="160" font-size="13.5" font-weight="700" fill="var(--brass)">Agendamento</text>
+            <line x1="588" y1="170" x2="802" y2="170" stroke="var(--brass)"/>
+            <text x="602" y="190">PK id</text>
+            <text x="602" y="210">FK cliente_id</text>
+            <text x="602" y="230">FK profissional_id</text>
+            <text x="602" y="250">FK servico_id</text>
+            <text x="602" y="270">data, hora_in&#237;cio, hora_fim</text>
+            <text x="602" y="290">situa&#231;&#227;o, observa&#231;&#245;es</text>
+
+            <rect x="834" y="168" width="134" height="104" rx="10" fill="var(--ok-soft)" stroke="var(--ok)"/>
+            <text x="848" y="190" font-size="13.5" font-weight="700" fill="var(--ok)">Atendimento</text>
+            <line x1="834" y1="200" x2="968" y2="200" stroke="var(--ok)"/>
+            <text x="848" y="220">PK id</text><text x="848" y="240">valor cobrado</text><text x="848" y="260">pagamento, data</text>
+          </g>
+          <g stroke="var(--line-strong)" stroke-width="1.5" fill="none">
+            <path d="M224 74 L304 74"/>
+            <path d="M224 100 L264 100 L264 208 L304 208"/>
+            <path d="M224 364 L304 364"/>
+            <path d="M500 74 L544 74 L544 198 L586 198"/>
+            <path d="M500 220 L586 220"/>
+            <path d="M224 338 L556 338 L556 250 L586 250"/>
+            <path d="M802 220 L832 220"/>
+          </g>
+          <g font-size="11" font-weight="700" fill="var(--ink-3)" font-family="IBM Plex Mono, monospace">
+            <text x="248" y="68">1:N</text>
+            <text x="268" y="202">1:N</text>
+            <text x="248" y="358">1:N</text>
+            <text x="548" y="130">1:N</text>
+            <text x="528" y="214">1:N</text>
+            <text x="470" y="332">1:N</text>
+            <text x="806" y="214">1:1</text>
+          </g>
+          <text x="20" y="452" font-size="11.5" fill="var(--ink-3)">Profissional vincula um Usu&#225;rio a uma Barbearia &#183; Disponibilidade pertence ao Profissional &#183; o Usu&#225;rio com perfil cliente &#233; o cliente_id do Agendamento</text>
+        </svg>
+      </div>
+      <p class="figcap">Figura 2 &#8212; Modelo conceitual de dados e cardinalidades.</p>
+    </div>
+  </div>
+
+  <div class="model-sec">
+    <h3>Arquitetura</h3>
+    <p>Organiza&#231;&#227;o em camadas, a mesma da solu&#231;&#227;o original em .NET: a interface conversa s&#243; com a API, e as regras de neg&#243;cio n&#227;o dependem do banco nem da tela.</p>
+    <div class="figure">
+      <div class="scroller">
+        <svg viewBox="0 0 900 400" role="img" aria-label="Arquitetura em camadas: apresenta&#231;&#227;o, API, dom&#237;nio e infraestrutura, com persist&#234;ncia e servi&#231;o de notifica&#231;&#245;es">
+          <defs>
+            <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line-strong)"/>
+            </marker>
+          </defs>
+          <rect x="40" y="20" width="820" height="76" rx="10" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+          <text x="58" y="46" font-size="13" font-weight="700" fill="var(--accent)">Apresenta&#231;&#227;o</text>
+          <text x="58" y="67" font-size="12" fill="var(--ink-2)">Aplica&#231;&#227;o web responsiva do cliente &#183; Painel da barbearia</text>
+          <text x="58" y="86" font-size="11.5" fill="var(--ink-3)">HTML, CSS e JavaScript &#8212; o prot&#243;tipo desta entrega</text>
+
+          <path d="M450 96 L450 118" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar2)"/>
+          <text x="462" y="113" font-size="11.5" font-weight="600" fill="var(--ink-3)">HTTP / JSON</text>
+
+          <rect x="40" y="120" width="820" height="76" rx="10" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="58" y="146" font-size="13" font-weight="700" fill="var(--ink)">API &#8212; camada de aplica&#231;&#227;o</text>
+          <text x="58" y="167" font-size="12" fill="var(--ink-2)">Endpoints REST, autentica&#231;&#227;o por token, valida&#231;&#227;o de entrada</text>
+          <text x="58" y="186" font-size="11.5" fill="var(--ink-3)">ASP.NET Core &#183; projeto BarbeariaB2B.Api</text>
+
+          <path d="M450 196 L450 218" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar2)"/>
+
+          <rect x="40" y="220" width="820" height="76" rx="10" fill="var(--brass-soft)" stroke="var(--brass)"/>
+          <text x="58" y="246" font-size="13" font-weight="700" fill="var(--brass)">Dom&#237;nio &#8212; regras de neg&#243;cio</text>
+          <text x="58" y="267" font-size="12" fill="var(--ink-2)">C&#225;lculo de hor&#225;rios livres, impedimento de reserva duplicada, estados do agendamento</text>
+          <text x="58" y="286" font-size="11.5" fill="var(--ink-3)">Entidades e servi&#231;os &#183; projeto BarbeariaB2B.Domain</text>
+
+          <path d="M300 296 L300 310 L240 310 L240 318" fill="none" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar2)"/>
+          <path d="M600 296 L600 310 L661 310 L661 318" fill="none" stroke="var(--line-strong)" stroke-width="1.6" marker-end="url(#ar2)"/>
+
+          <rect x="40" y="320" width="398" height="64" rx="10" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="58" y="345" font-size="13" font-weight="700" fill="var(--ink)">Infraestrutura &#8212; persist&#234;ncia</text>
+          <text x="58" y="366" font-size="11.5" fill="var(--ink-3)">Entity Framework Core &#183; SQL Server &#183; BarbeariaB2B.Infrastructure</text>
+
+          <rect x="462" y="320" width="398" height="64" rx="10" fill="var(--surface-2)" stroke="var(--line-strong)"/>
+          <text x="480" y="345" font-size="13" font-weight="700" fill="var(--ink)">Notifica&#231;&#245;es</text>
+          <text x="480" y="366" font-size="11.5" fill="var(--ink-3)">Confirma&#231;&#227;o e lembrete por e-mail e WhatsApp (servi&#231;o externo)</text>
+        </svg>
+      </div>
+      <p class="figcap">Figura 3 &#8212; Arquitetura em camadas. A separa&#231;&#227;o mant&#233;m a regra de agendamento independente da interface e do banco (RNF07).</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+var SERVICOS = [
+  {id:'s1', nome:'Corte Social',     dur:30, preco:35, mes:62, ativo:true},
+  {id:'s2', nome:'Corte Degradê', dur:40, preco:45, mes:88, ativo:true},
+  {id:'s3', nome:'Barba na Navalha', dur:30, preco:35, mes:54, ativo:true},
+  {id:'s4', nome:'Corte + Barba',    dur:60, preco:70, mes:71, ativo:true},
+  {id:'s5', nome:'Pezinho',          dur:15, preco:20, mes:33, ativo:true},
+  {id:'s6', nome:'Corte Infantil',   dur:30, preco:30, mes:19, ativo:false}
+];
+var PROS = [
+  {id:'p0', nome:'Primeiro disponível', ini:'+',  esp:'Qualquer profissional livre no horário', jornada:'', ocup:null},
+  {id:'p1', nome:'Nilo Ferreira',  ini:'NF', esp:'Degradê e navalha',       jornada:'Seg a Sáb · 09h–19h', ocup:91},
+  {id:'p2', nome:'Douglas Prado',  ini:'DP', esp:'Corte social e infantil', jornada:'Ter a Sáb · 10h–19h', ocup:76},
+  {id:'p3', nome:'Wesley Amorim',  ini:'WA', esp:'Barba e pigmentação', jornada:'Qua a Sáb · 12h–20h', ocup:68}
+];
+var DIAS = [
+  {id:'d1', sem:'Seg', num:'24', label:'segunda, 24 de novembro'},
+  {id:'d2', sem:'Ter', num:'25', label:'terça, 25 de novembro'},
+  {id:'d3', sem:'Qua', num:'26', label:'quarta, 26 de novembro'},
+  {id:'d4', sem:'Qui', num:'27', label:'quinta, 27 de novembro'},
+  {id:'d5', sem:'Sex', num:'28', label:'sexta, 28 de novembro'},
+  {id:'d6', sem:'Sáb', num:'29', label:'sábado, 29 de novembro'}
+];
+var OCUPADOS = {
+  d1:['09:00','09:30','10:00','10:30','14:00','15:30','16:00','18:30'],
+  d2:['11:00','11:30','17:00'],
+  d3:['09:00','13:00','13:30','18:00'],
+  d4:['10:00','16:30'],
+  d5:['09:00','09:30','15:00','17:30','18:00','18:30'],
+  d6:['09:00','09:30','10:00','10:30','11:00','14:00','14:30','15:00','16:00','17:00','17:30','18:00','18:30']
+};
+
+var estado = {servico:null, pro:null, dia:'d1', hora:null};
+var TELAS = [['login','Entrar'],['servico','Escolha o serviço'],['profissional','Escolha o profissional'],
+             ['horario','Data e horário'],['confirmar','Confirmar'],['sucesso','Comprovante'],['meus','Meus agendamentos']];
+
+function brl(v){ return 'R$ ' + v.toFixed(2).replace('.', ','); }
+function $(s, c){ return (c || document).querySelector(s); }
+function $$(s, c){ return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+$$('.tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    $$('.tab').forEach(function(x){ x.setAttribute('aria-selected', String(x === t)); });
+    $$('[data-view-panel]').forEach(function(p){ p.hidden = p.dataset.viewPanel !== t.dataset.view; });
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+function irPara(tela){
+  $$('[data-screen]').forEach(function(s){ s.hidden = s.dataset.screen !== tela; });
+  $$('#steplist button').forEach(function(b){ b.setAttribute('aria-current', String(b.dataset.step === tela)); });
+  if(tela === 'confirmar'){ montarResumo('#resumo'); }
+  if(tela === 'sucesso'){ montarResumo('#resumo2'); montarSucesso(); }
+  if(tela === 'meus'){ montarMeus(); }
+}
+document.addEventListener('click', function(e){
+  var btn = e.target.closest ? e.target.closest('[data-go]') : null;
+  if(btn){ irPara(btn.dataset.go); }
+});
+
+var ls = $('#lista-servicos');
+SERVICOS.filter(function(s){ return s.ativo; }).forEach(function(s){
+  var b = document.createElement('button');
+  b.className = 'pick'; b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+  b.innerHTML = '<div class="pick-main"><div class="pick-name"></div><div class="pick-meta"></div></div><div class="pick-price"></div>';
+  $('.pick-name', b).textContent = s.nome;
+  $('.pick-meta', b).textContent = s.dur + ' min';
+  $('.pick-price', b).textContent = brl(s.preco);
+  b.addEventListener('click', function(){
+    estado.servico = s; estado.hora = null;
+    $$('#lista-servicos .pick').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    $('#btn-servico').disabled = false;
+  });
+  ls.appendChild(b);
+});
+
+var lp = $('#lista-pros');
+PROS.forEach(function(p){
+  var b = document.createElement('button');
+  b.className = 'pick'; b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+  b.innerHTML = '<div class="avatar"></div><div class="pick-main"><div class="pick-name"></div><div class="pick-meta"></div></div>';
+  $('.avatar', b).textContent = p.ini;
+  $('.pick-name', b).textContent = p.nome;
+  $('.pick-meta', b).textContent = p.esp;
+  b.addEventListener('click', function(){
+    estado.pro = p; estado.hora = null;
+    $$('#lista-pros .pick').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    $('#btn-pro').disabled = false;
+  });
+  lp.appendChild(b);
+});
+
+var ld = $('#dias');
+DIAS.forEach(function(d){
+  var b = document.createElement('button');
+  b.className = 'day'; b.type = 'button';
+  b.setAttribute('aria-pressed', String(d.id === estado.dia));
+  b.innerHTML = '<small></small><b></b>';
+  $('small', b).textContent = d.sem;
+  $('b', b).textContent = d.num;
+  b.addEventListener('click', function(){
+    estado.dia = d.id; estado.hora = null;
+    $$('#dias .day').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    $('#btn-hora').disabled = true;
+    montarSlots();
+  });
+  ld.appendChild(b);
+});
+
+function montarSlots(){
+  var alvo = $('#slots');
+  alvo.innerHTML = '';
+  var ocup = OCUPADOS[estado.dia] || [];
+  for(var m = 540; m <= 1110; m += 30){
+    (function(){
+      var h = pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+      var b = document.createElement('button');
+      b.className = 'slot'; b.type = 'button'; b.textContent = h;
+      if(ocup.indexOf(h) >= 0){
+        b.disabled = true;
+        b.title = 'Horário já reservado';
+      } else {
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function(){
+          estado.hora = h;
+          $$('#slots .slot').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+          $('#btn-hora').disabled = false;
+        });
+      }
+      alvo.appendChild(b);
+    })();
+  }
+}
+montarSlots();
+
+function linha(rot, val){ return '<div><dt>' + rot + '</dt><dd>' + val + '</dd></div>'; }
+function montarResumo(sel){
+  var s = estado.servico || SERVICOS[1];
+  var p = estado.pro || PROS[1];
+  var d = DIAS.filter(function(x){ return x.id === estado.dia; })[0];
+  var hora = estado.hora || '14:00';
+  var parts = hora.split(':');
+  var fimMin = (+parts[0]) * 60 + (+parts[1]) + s.dur;
+  var fim = pad(Math.floor(fimMin / 60)) + ':' + pad(fimMin % 60);
+  $(sel).innerHTML =
+    linha('Serviço', '<b>' + s.nome + '</b>') +
+    linha('Profissional', p.id === 'p0' ? 'Primeiro disponível' : p.nome) +
+    linha('Data', d.label) +
+    linha('Horário', '<span class="money">' + hora + ' – ' + fim + '</span>') +
+    linha('Duração', s.dur + ' min') +
+    linha('Total', '<span class="money">' + brl(s.preco) + '</span>');
+}
+function montarSucesso(){
+  var d = DIAS.filter(function(x){ return x.id === estado.dia; })[0];
+  $('#sucesso-txt').textContent = 'Enviamos a confirmação por e-mail. O lembrete chega 2 horas antes, na ' + d.label + '.';
+}
+function montarMeus(){
+  var s = estado.servico || SERVICOS[1];
+  var p = estado.pro || PROS[1];
+  var d = DIAS.filter(function(x){ return x.id === estado.dia; })[0];
+  $('#appt-novo').innerHTML =
+    '<p style="font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px">Próximo</p>' +
+    '<div class="appt" style="border-color:var(--accent);background:var(--accent-soft)">' +
+      '<div class="appt-when" style="border-color:var(--accent-line)">NOV<b>' + d.num + '</b>' + (estado.hora || '14:00') + '</div>' +
+      '<div class="pick-main"><div class="pick-name">' + s.nome + '</div>' +
+      '<div class="pick-meta">com ' + (p.id === 'p0' ? 'primeiro disponível' : p.nome) + '</div>' +
+      '<div style="display:flex;gap:7px;align-items:center;margin-top:6px;flex-wrap:wrap">' +
+      '<span class="chip chip-warn">Confirmado</span>' +
+      '<span class="linkish" style="font-size:12.5px">Cancelar</span></div></div></div>';
+}
+
+var sl = $('#steplist');
+TELAS.forEach(function(t, i){
+  var li = document.createElement('li');
+  var b = document.createElement('button');
+  b.type = 'button'; b.dataset.step = t[0];
+  b.setAttribute('aria-current', String(i === 0));
+  b.innerHTML = '<i></i><span></span>';
+  $('i', b).textContent = String(i + 1);
+  $('span', b).textContent = t[1];
+  b.addEventListener('click', function(){ irPara(t[0]); });
+  li.appendChild(b);
+  sl.appendChild(li);
+});
+
+$$('.side button').forEach(function(b){
+  b.addEventListener('click', function(){
+    $$('.side button').forEach(function(x){ x.setAttribute('aria-current', String(x === b)); });
+    $$('[data-panel-screen]').forEach(function(s){ s.hidden = s.dataset.panelScreen !== b.dataset.panel; });
+  });
+});
+
+var tb = $('#tbl-servicos');
+SERVICOS.forEach(function(s){
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><b></b></td>' +
+    '<td class="num"></td>' +
+    '<td class="num"></td>' +
+    '<td class="num"></td>' +
+    '<td>' + (s.ativo ? '<span class="chip chip-ok">Ativo</span>' : '<span class="chip chip-bad">Inativo</span>') + '</td>' +
+    '<td><span class="linkish">Editar</span></td>';
+  var tds = tr.querySelectorAll('td');
+  tds[0].firstChild.textContent = s.nome;
+  tds[1].textContent = s.dur + ' min';
+  tds[2].textContent = brl(s.preco);
+  tds[3].textContent = String(s.mes);
+  tb.appendChild(tr);
+});
+
+var gp = $('#grid-pros');
+PROS.filter(function(p){ return p.ocup !== null; }).forEach(function(p){
+  var d = document.createElement('div');
+  d.className = 'pro';
+  d.innerHTML =
+    '<div class="avatar"></div>' +
+    '<div style="flex:1;min-width:0"><h4></h4><p class="esp"></p><p class="jor" style="margin-top:3px"></p>' +
+    '<div class="bar-track"><div class="bar-fill" style="width:' + p.ocup + '%"></div></div>' +
+    '<p style="margin-top:4px"><span class="money" style="color:var(--ink-2);font-weight:600">' + p.ocup + '%</span> de ocupação na semana</p></div>';
+  $('.avatar', d).textContent = p.ini;
+  $('h4', d).textContent = p.nome;
+  $('.esp', d).textContent = p.esp;
+  $('.jor', d).textContent = p.jornada;
+  gp.appendChild(d);
+});
+
+(function(){
+  var svg = document.getElementById('chart-semana');
+  if(!svg){ return; }
+  var dados = [['Seg', 18], ['Ter', 22], ['Qua', 25], ['Qui', 31], ['Sex', 38], ['Sáb', 44]];
+  var x0 = 48, x1 = 524, base = 200, topo = 34, max = 50, bw = 50;
+  var slot = (x1 - x0) / dados.length;
+  var ns = 'http://www.w3.org/2000/svg';
+  function el(n, a){
+    var e = document.createElementNS(ns, n);
+    for(var k in a){ e.setAttribute(k, a[k]); }
+    return e;
+  }
+  [0, 25, 50].forEach(function(v){
+    var y = base - (v / max) * (base - topo);
+    svg.appendChild(el('line', {x1:x0 - 8, y1:y, x2:x1, y2:y, stroke:'var(--line)', 'stroke-width':1}));
+    var t = el('text', {x:x0 - 14, y:y + 4, 'text-anchor':'end', 'font-size':11, fill:'var(--ink-3)', 'font-family':'IBM Plex Mono, monospace'});
+    t.textContent = String(v);
+    svg.appendChild(t);
+  });
+  dados.forEach(function(d, i){
+    var h = (d[1] / max) * (base - topo);
+    var x = x0 + i * slot + (slot - bw) / 2;
+    var y = base - h, r = 4;
+    svg.appendChild(el('path', {
+      d:'M' + x + ' ' + base + ' L' + x + ' ' + (y + r) + ' Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y +
+        ' L' + (x + bw - r) + ' ' + y + ' Q' + (x + bw) + ' ' + y + ' ' + (x + bw) + ' ' + (y + r) +
+        ' L' + (x + bw) + ' ' + base + ' Z',
+      fill:'var(--accent)'
+    }));
+    var v = el('text', {x:x + bw / 2, y:y - 9, 'text-anchor':'middle', 'font-size':12.5, 'font-weight':700, fill:'var(--ink)', 'font-family':'IBM Plex Mono, monospace'});
+    v.textContent = String(d[1]);
+    svg.appendChild(v);
+    var l = el('text', {x:x + bw / 2, y:base + 21, 'text-anchor':'middle', 'font-size':12, fill:'var(--ink-2)'});
+    l.textContent = d[0];
+    svg.appendChild(l);
+  });
+  svg.appendChild(el('line', {x1:x0 - 8, y1:base, x2:x1, y2:base, stroke:'var(--line-strong)', 'stroke-width':1.5}));
+  var cap = el('text', {x:x0 - 8, y:base + 46, 'font-size':11.5, fill:'var(--ink-3)'});
+  cap.textContent = 'atendimentos concluídos';
+  svg.appendChild(cap);
+})();
+
+(function(){
+  var alvo = document.getElementById('receita-lista');
+  if(!alvo){ return; }
+  var tot = SERVICOS.reduce(function(a, s){ return a + s.preco * s.mes; }, 0);
+  SERVICOS.map(function(s){ return {nome:s.nome, val:s.preco * s.mes}; })
+    .sort(function(a, b){ return b.val - a.val; })
+    .forEach(function(s){
+      var pct = s.val / tot * 100;
+      var d = document.createElement('div');
+      d.innerHTML =
+        '<div style="display:flex;justify-content:space-between;gap:10px;font-size:13px">' +
+        '<span class="nm"></span>' +
+        '<span class="money vl" style="color:var(--ink-2);font-weight:600"></span></div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:' + pct.toFixed(1) + '%"></div></div>';
+      d.querySelector('.nm').textContent = s.nome;
+      d.querySelector('.vl').textContent = brl(s.val) + ' · ' + pct.toFixed(0) + '%';
+      alvo.appendChild(d);
+    });
+})();
+</script>
